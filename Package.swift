@@ -3,23 +3,25 @@
 import PackageDescription
 
 let package = Package(
-    name: "swiftly",
+    name: "Swiftly",
     products: [
         .executable(
-            name: "swiftly",
-            targets: ["swiftly"]),
+            name: "Swiftly",
+            targets: ["Swiftly"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.0.0"),
+        .package(url: "https://github.com/JochenBe/Shell", from: "1.0.0")
     ],
     targets: [
         .executableTarget(
-            name: "swiftly",
+            name: "Swiftly",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "Shell"
             ]),
         .testTarget(
-            name: "swiftlyTests",
-            dependencies: ["swiftly"]),
+            name: "SwiftlyTests",
+            dependencies: ["Swiftly"]),
     ]
 )

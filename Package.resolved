@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Shell",
+        "repositoryURL": "https://github.com/JochenBe/Shell",
+        "state": {
+          "branch": null,
+          "revision": "a43e19a671ed256ca2672297d86af71503a61e43",
+          "version": "1.2.0"
+        }
+      },
+      {
         "package": "swift-argument-parser",
         "repositoryURL": "https://github.com/apple/swift-argument-parser",
         "state": {
