@@ -4,9 +4,12 @@ import PackageDescription
 
 let package = Package(
     name: "Swiftly",
+    platforms: [
+        .macOS(.v10_12),
+    ],
     products: [
         .executable(
-            name: "Swiftly",
+            name: "swiftly",
             targets: ["Swiftly"]),
     ],
     dependencies: [
