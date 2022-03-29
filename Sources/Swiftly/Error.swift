@@ -8,11 +8,13 @@
 import Foundation
 
 enum SwiftlyError: Error {
-    case failedToConvertArgumentToURL
-    case failedToInitializeBinURL
-    case failedToCreateSwiftlyDirectory
+    case failedToReadPackages
+    case failedToWritePackages
+    case failedToDecodePackages
+    case failedToEncodePackages
+    case failedToCreateDirectory
+    case failedToGetContentsOfDirectory
+    case failedToConvertStringToURL
     case failedToCloneRepository
     case failedToBuildPackage
-    case failedToGetContentsOfBinPath
-    case failedToConvertBinPathToURL
 }
