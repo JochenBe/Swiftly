@@ -1,6 +1,11 @@
-public struct swiftly {
-    public private(set) var text = "Hello, World!"
+//
+//  swiftly.swift
+//
+//
+//  Created by Jochen Bernard on 29/03/2022.
+//
 
-    public init() {
-    }
-}
+import ArgumentParser
+
+@main
+struct swiftly: ParsableCommand {}
