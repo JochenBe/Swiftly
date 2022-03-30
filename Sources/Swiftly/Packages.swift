@@ -18,12 +18,12 @@ final class Packages {
         }
         
         guard let data = try? Data(contentsOf: url) else {
-            throw SwiftlyError.failedToReadPackages
+            throw SwiftlyError.failedToReadPackages(url)
         }
         
         let decoder = JSONDecoder()
         guard let packages = try? decoder.decode([Package].self, from: data) else {
-            throw SwiftlyError.failedToDecodePackages
+            throw SwiftlyError.failedToDecodePackages(data)
         }
         
         return packages
@@ -33,13 +33,13 @@ final class Packages {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         guard let data = try? encoder.encode(packages) else {
-            throw SwiftlyError.failedToEncodePackages
+            throw SwiftlyError.failedToEncodePackages(packages)
         }
         
         do {
             try data.write(to: url)
         } catch {
-            throw SwiftlyError.failedToWritePackages
+            throw SwiftlyError.failedToWritePackages(url)
         }
     }
     
@@ -55,11 +55,15 @@ final class Packages {
         return nil
     }
     
-    static func get(by executables: Set<String>) throws -> [Package] {
+    static func getConflictingPackages(for package: Package) throws -> [Package] {
         var packages = try get()
+        
+        let executables = Set(package.executables)
         
         packages = packages.filter { p in
             !Set(p.executables).isDisjoint(with: executables)
+            &&
+            p.url != package.url
         }
         
         return packages

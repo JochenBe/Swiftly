@@ -8,16 +8,16 @@
 import Foundation
 
 enum SwiftlyError: Error {
-    case failedToReadPackages
-    case failedToWritePackages
-    case failedToDecodePackages
-    case failedToEncodePackages
-    case failedToCreateDirectory
-    case failedToGetContentsOfDirectory
-    case failedToConvertStringToURL
-    case failedToCloneRepository
-    case failedToBuildPackage
-    case failedToRemoveExecutable
-    case conflictingPackages
-    case packageNotFound
+    case failedToReadPackages(URL)
+    case failedToWritePackages(URL)
+    case failedToDecodePackages(Data)
+    case failedToEncodePackages([Package])
+    case failedToConvertStringToURL(String)
+    case failedToCloneRepository(URL, URL)
+    case failedToBuildPackage(URL)
+    case failedToCreateDirectory(URL)
+    case failedToGetContentsOfDirectory(URL)
+    case failedToRemoveExecutable(URL)
+    case conflictingPackages(Package, [Package])
+    case packageNotFound(URL)
 }

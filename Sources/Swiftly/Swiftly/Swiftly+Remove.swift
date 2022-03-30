@@ -14,7 +14,7 @@ extension Swiftly {
         
         func run() throws {
             guard let url = URL(string: options.url) else {
-                throw SwiftlyError.failedToConvertStringToURL
+                throw SwiftlyError.failedToConvertStringToURL(options.url)
             }
             
             let packageRemover = PackageRemover(url: url, delegate: self)

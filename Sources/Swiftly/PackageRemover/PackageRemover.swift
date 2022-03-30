@@ -18,16 +18,18 @@ final class PackageRemover {
     
     func resume() throws {
         guard let package = try Packages.get(by: url) else {
-            throw SwiftlyError.packageNotFound
+            throw SwiftlyError.packageNotFound(url)
         }
         
         delegate?.willRemoveExecutables()
         
         for executable in package.executables {
+            let executablePath = Swiftly.binDirectory.appendingPathComponent(executable)
+            
             do {
-                try FileManager.default.removeItem(at: Swiftly.binDirectory.appendingPathComponent(executable))
+                try FileManager.default.removeItem(at: executablePath)
             } catch {
-                throw SwiftlyError.failedToRemoveExecutable
+                throw SwiftlyError.failedToRemoveExecutable(executablePath)
             }
         }
         

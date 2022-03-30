@@ -24,10 +24,10 @@ struct Swiftly: ParsableCommand {
             do {
                 try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
             } catch {
-                throw SwiftlyError.failedToCreateDirectory
+                throw SwiftlyError.failedToCreateDirectory(url)
             }
         } else if !isDirectory.boolValue {
-            throw SwiftlyError.failedToCreateDirectory
+            throw SwiftlyError.failedToCreateDirectory(url)
         }
     }
 }

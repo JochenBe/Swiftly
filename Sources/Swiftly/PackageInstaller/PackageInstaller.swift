@@ -22,25 +22,25 @@ final class PackageInstaller {
         delegate?.willCloneRepository()
         
         let packageName = url.lastPathComponent
-        let packagePath = Swiftly.directory.appendingPathComponent(packageName).path
+        let packageURL = Swiftly.directory.appendingPathComponent(packageName)
         
-        guard Git.clone(from: url, to: packagePath) == 0 else {
-            throw SwiftlyError.failedToCloneRepository
+        guard Git.clone(from: url, to: packageURL.path) == 0 else {
+            throw SwiftlyError.failedToCloneRepository(url, packageURL)
         }
         
         defer {
-            try? FileManager.default.removeItem(atPath: packagePath)
+            try? FileManager.default.removeItem(atPath: packageURL.path)
         }
         
         delegate?.willBuildPackage()
         
-        guard Swift.build(path: packagePath) == 0 else {
-            throw SwiftlyError.failedToBuildPackage
+        guard Swift.build(path: packageURL.path) == 0 else {
+            throw SwiftlyError.failedToBuildPackage(packageURL)
         }
         
-        let binURL = URL(fileURLWithPath: Swift.getBinPath(path: packagePath))
+        let binURL = URL(fileURLWithPath: Swift.getBinPath(path: packageURL.path))
         guard let contents = try? FileManager.default.contentsOfDirectory(atPath: binURL.path) else {
-            throw SwiftlyError.failedToGetContentsOfDirectory
+            throw SwiftlyError.failedToGetContentsOfDirectory(binURL)
         }
         
         var isDirectory: ObjCBool = false
@@ -52,14 +52,13 @@ final class PackageInstaller {
             !isDirectory.boolValue
         }
         
-        let conflictingPackages = try Packages.get(by: Set(executables))
-        guard conflictingPackages.allSatisfy({ p in
-            p.url == url
-        }) else {
-            throw SwiftlyError.conflictingPackages
+        let package = Package(url: url, executables: executables)
+        let conflictingPackages = try Packages.getConflictingPackages(for: package)
+        
+        guard conflictingPackages.count == 0 else {
+            throw SwiftlyError.conflictingPackages(package, conflictingPackages)
         }
         
-        let package = Package(url: url, executables: executables)
         try Packages.add(package)
         
         delegate?.willMoveExecutables()
