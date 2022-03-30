@@ -9,8 +9,6 @@ import Foundation
 import Shell
 
 struct Git {
-    private init() {}
-    
     private static func execute(_ args: String...) -> Int32 {
         Shell.execute(["git"] + args) { string in
             print(string, terminator: "")

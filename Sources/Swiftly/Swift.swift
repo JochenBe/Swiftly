@@ -9,8 +9,6 @@ import Foundation
 import Shell
 
 struct Swift {
-    private init() {}
-    
     private static func execute(_ args: String...) -> Int32 {
         Shell.execute(["swift"] + args) { string in
             print(string, terminator: "")

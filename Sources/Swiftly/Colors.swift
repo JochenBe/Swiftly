@@ -6,8 +6,6 @@
 //
 
 struct Colors {
-    private init() {}
-    
     private static func color(_ color: UInt8, _ string: String) -> String {
         "\u{001b}[0;3\(color)m" + string + "\u{001b}[0;0m"
     }
