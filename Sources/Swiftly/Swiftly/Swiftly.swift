@@ -1,5 +1,5 @@
 //
-//  swiftly.swift
+//  Swiftly.swift
 //
 //
 //  Created by Jochen Bernard on 29/03/2022.
