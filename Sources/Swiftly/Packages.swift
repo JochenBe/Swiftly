@@ -8,11 +8,15 @@
 import Foundation
 
 final class Packages {
-    private static let url = swiftly.directory.appendingPathComponent("packages.json")
+    private static let url = Swiftly.directory.appendingPathComponent("packages.json")
     
     private init() {}
     
-    static func get() throws -> [Package] {
+    private static func get() throws -> [Package] {
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            return []
+        }
+        
         guard let data = try? Data(contentsOf: url) else {
             throw SwiftlyError.failedToReadPackages
         }
@@ -23,6 +27,20 @@ final class Packages {
         }
         
         return packages
+    }
+    
+    private static func set(_ packages: [Package]) throws {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        guard let data = try? encoder.encode(packages) else {
+            throw SwiftlyError.failedToEncodePackages
+        }
+        
+        do {
+            try data.write(to: url)
+        } catch {
+            throw SwiftlyError.failedToWritePackages
+        }
     }
     
     static func get(by url: URL) throws -> Package? {
@@ -37,17 +55,14 @@ final class Packages {
         return nil
     }
     
-    static func set(_ packages: [Package]) throws {
-        let encoder = JSONEncoder()
-        guard let data = try? encoder.encode(packages) else {
-            throw SwiftlyError.failedToEncodePackages
+    static func get(by executables: Set<String>) throws -> [Package] {
+        var packages = try get()
+        
+        packages = packages.filter { p in
+            !Set(p.executables).isDisjoint(with: executables)
         }
         
-        do {
-            try data.write(to: url)
-        } catch {
-            throw SwiftlyError.failedToWritePackages
-        }
+        return packages
     }
     
     static func add(_ package: Package) throws {
@@ -58,6 +73,16 @@ final class Packages {
         }
         
         packages.append(package)
+        
+        try set(packages)
+    }
+    
+    static func remove(_ package: Package) throws {
+        var packages = try get()
+        
+        packages = packages.filter { p in
+            p.url != package.url
+        }
         
         try set(packages)
     }

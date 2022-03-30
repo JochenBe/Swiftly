@@ -17,12 +17,12 @@ final class PackageInstaller {
     }
     
     func resume() throws {
-        try swiftly.useDirectory(swiftly.binDirectory)
+        try Swiftly.useDirectory(Swiftly.binDirectory)
         
         delegate?.willCloneRepository()
         
         let packageName = url.lastPathComponent
-        let packagePath = swiftly.directory.appendingPathComponent(packageName).path
+        let packagePath = Swiftly.directory.appendingPathComponent(packageName).path
         
         guard Git.clone(from: url, to: packagePath) == 0 else {
             throw SwiftlyError.failedToCloneRepository
@@ -38,10 +38,7 @@ final class PackageInstaller {
             throw SwiftlyError.failedToBuildPackage
         }
         
-        guard let binURL = URL(string: Swift.getBinPath(path: packagePath)) else {
-            throw SwiftlyError.failedToConvertStringToURL
-        }
-        
+        let binURL = URL(fileURLWithPath: Swift.getBinPath(path: packagePath))
         guard let contents = try? FileManager.default.contentsOfDirectory(atPath: binURL.path) else {
             throw SwiftlyError.failedToGetContentsOfDirectory
         }
@@ -55,13 +52,23 @@ final class PackageInstaller {
             !isDirectory.boolValue
         }
         
+        let conflictingPackages = try Packages.get(by: Set(executables))
+        guard conflictingPackages.allSatisfy({ p in
+            p.url == url
+        }) else {
+            throw SwiftlyError.conflictingPackages
+        }
+        
+        let package = Package(url: url, executables: executables)
+        try Packages.add(package)
+        
         delegate?.willMoveExecutables()
         
         executables.forEach { executable in
             do {
-                try FileManager.default.moveItem(
-                    atPath: binURL.appendingPathComponent(executable).path,
-                    toPath: swiftly.binDirectory.appendingPathComponent(executable).path
+                let _ = try FileManager.default.replaceItemAt(
+                    Swiftly.binDirectory.appendingPathComponent(executable),
+                    withItemAt: binURL.appendingPathComponent(executable)
                 )
             } catch {
                 print(error)

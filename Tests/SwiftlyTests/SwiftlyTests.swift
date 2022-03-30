@@ -6,6 +6,6 @@
 //
 
 import XCTest
-@testable import Swiftly
+@testable import swiftly
 
 final class SwiftlyTests: XCTestCase {}

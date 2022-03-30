@@ -17,4 +17,7 @@ enum SwiftlyError: Error {
     case failedToConvertStringToURL
     case failedToCloneRepository
     case failedToBuildPackage
+    case failedToRemoveExecutable
+    case conflictingPackages
+    case packageNotFound
 }

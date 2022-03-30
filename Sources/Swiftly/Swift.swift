@@ -19,7 +19,7 @@ final class Swift {
     
     static func build(path: String) -> Int32 {
         let previousPath = FileManager.default.currentDirectoryPath
-
+        
         defer {
             FileManager.default.changeCurrentDirectoryPath(previousPath)
         }
