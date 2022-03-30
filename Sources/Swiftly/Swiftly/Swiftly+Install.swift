@@ -10,17 +10,27 @@ import Foundation
 
 extension Swiftly {
     struct Install: ParsableCommand, PackageInstallerDelegate {
-        @OptionGroup var options: Options
+        @Argument(help: "The URL of the package to install.")
+        var url: String
         
         func run() throws {
-            guard let url = URL(string: options.url) else {
-                throw SwiftlyError.failedToConvertStringToURL(options.url)
-            }
-            
             try Swiftly.useDirectory(Swiftly.binDirectory)
-                        
+            
             guard try Packages.get(by: url) == nil else {
                 throw SwiftlyError.packageAlreadyInstalled(url)
+            }
+            
+            guard var url = URL(string: url) else {
+                throw SwiftlyError.failedToConvertStringToURL(url)
+            }
+            
+            if !(url.scheme?.starts(with: "http") ?? false) {
+                let github = "https://github.com"
+                guard let github = URL(string: github) else {
+                    throw SwiftlyError.failedToConvertStringToURL(github)
+                }
+                
+                url = github.appendingPathComponent(url.path)
             }
             
             let packageInstaller = PackageInstaller(url: url, delegate: self)

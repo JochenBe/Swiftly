@@ -10,20 +10,17 @@ import Foundation
 
 extension Swiftly {
     struct Update: ParsableCommand, PackageInstallerDelegate {
-        @OptionGroup var options: Options
+        @Argument(help: "The package to update.")
+        var package: String
         
         func run() throws {
-            guard let url = URL(string: options.url) else {
-                throw SwiftlyError.failedToConvertStringToURL(options.url)
-            }
-            
             try Swiftly.useDirectory(Swiftly.binDirectory)
             
-            guard try Packages.get(by: url) != nil else {
-                throw SwiftlyError.packageNotFound(url)
+            guard let package = try Packages.get(by: package) else {
+                throw SwiftlyError.packageNotFound(package)
             }
             
-            let packageInstaller = PackageInstaller(url: url, delegate: self)
+            let packageInstaller = PackageInstaller(package: package, delegate: self)
             try packageInstaller.resume()
         }
         

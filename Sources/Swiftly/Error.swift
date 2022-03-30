@@ -18,7 +18,7 @@ enum SwiftlyError: Error {
     case failedToCreateDirectory(URL)
     case failedToGetContentsOfDirectory(URL)
     case failedToRemoveExecutable(URL)
-    case packageAlreadyInstalled(URL)
-    case packageNotFound(URL)
+    case packageAlreadyInstalled(String)
+    case packageNotFound(Any)
     case conflictingPackages(Package, [Package])
 }

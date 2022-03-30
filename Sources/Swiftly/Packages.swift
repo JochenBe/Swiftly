@@ -43,11 +43,17 @@ final class Packages {
         }
     }
     
-    static func get(by url: URL) throws -> Package? {
+    static func get(by string: String) throws -> Package? {
         let packages = try get()
         
         for package in packages {
-            if package.url == url {
+            if (
+                package.url.absoluteString == string
+                ||
+                package.url.path.trimmingCharacters(in: .init(charactersIn: "/")) == string
+                ||
+                package.executables.contains(string)
+            ) {
                 return package
             }
         }

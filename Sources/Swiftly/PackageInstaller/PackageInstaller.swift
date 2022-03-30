@@ -16,6 +16,11 @@ final class PackageInstaller {
         self.delegate = delegate
     }
     
+    init(package: Package, delegate: PackageInstallerDelegate? = nil) {
+        self.url = package.url
+        self.delegate = delegate
+    }
+    
     func resume() throws {        
         delegate?.willCloneRepository()
         

@@ -8,19 +8,15 @@
 import Foundation
 
 final class PackageRemover {
-    let url: URL
+    let package: Package
     var delegate: PackageRemoverDelegate?
     
-    init(url: URL, delegate: PackageRemoverDelegate? = nil) {
-        self.url = url
+    init(package: Package, delegate: PackageRemoverDelegate? = nil) {
+        self.package = package
         self.delegate = delegate
     }
     
     func resume() throws {
-        guard let package = try Packages.get(by: url) else {
-            throw SwiftlyError.packageNotFound(url)
-        }
-        
         delegate?.willRemoveExecutables()
         
         for executable in package.executables {

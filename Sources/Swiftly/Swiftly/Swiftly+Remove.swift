@@ -10,16 +10,17 @@ import Foundation
 
 extension Swiftly {
     struct Remove: ParsableCommand, PackageRemoverDelegate {
-        @OptionGroup var options: Options
+        @Argument(help: "The package to remove.")
+        var package: String
         
         func run() throws {
-            guard let url = URL(string: options.url) else {
-                throw SwiftlyError.failedToConvertStringToURL(options.url)
-            }
-            
             try Swiftly.useDirectory(Swiftly.binDirectory)
             
-            let packageRemover = PackageRemover(url: url, delegate: self)
+            guard let package = try Packages.get(by: package) else {
+                throw SwiftlyError.packageNotFound(package)
+            }
+            
+            let packageRemover = PackageRemover(package: package, delegate: self)
             try packageRemover.resume()
         }
         
