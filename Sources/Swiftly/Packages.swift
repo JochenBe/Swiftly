@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class Packages {
+struct Packages {
     private static let url = Swiftly.directory.appendingPathComponent("packages.json")
     
     private init() {}

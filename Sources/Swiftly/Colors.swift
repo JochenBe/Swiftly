@@ -5,7 +5,7 @@
 //  Created by Jochen Bernard on 30/03/2022.
 //
 
-final class Colors {
+struct Colors {
     private init() {}
     
     private static func color(_ color: UInt8, _ string: String) -> String {

@@ -8,7 +8,7 @@
 import Foundation
 import Shell
 
-final class Git {
+struct Git {
     private init() {}
     
     private static func execute(_ args: String...) -> Int32 {
