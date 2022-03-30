@@ -12,7 +12,8 @@ import Foundation
 struct Swiftly: ParsableCommand {
     static let configuration = CommandConfiguration(subcommands: [
         Install.self,
-        Remove.self
+        Update.self,
+        Remove.self,
     ])
     
     static let directory = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".swiftly")

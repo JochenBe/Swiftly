@@ -1,5 +1,5 @@
 //
-//  Swiftly+Install.swift
+//  Swiftly+Update.swift
 //  
 //
 //  Created by Jochen Bernard on 30/03/2022.
@@ -9,7 +9,7 @@ import ArgumentParser
 import Foundation
 
 extension Swiftly {
-    struct Install: ParsableCommand, PackageInstallerDelegate {
+    struct Update: ParsableCommand, PackageInstallerDelegate {
         @OptionGroup var options: Options
         
         func run() throws {
@@ -18,9 +18,9 @@ extension Swiftly {
             }
             
             try Swiftly.useDirectory(Swiftly.binDirectory)
-                        
-            guard try Packages.get(by: url) == nil else {
-                throw SwiftlyError.packageAlreadyInstalled(url)
+            
+            guard try Packages.get(by: url) != nil else {
+                throw SwiftlyError.packageNotFound(url)
             }
             
             let packageInstaller = PackageInstaller(url: url, delegate: self)

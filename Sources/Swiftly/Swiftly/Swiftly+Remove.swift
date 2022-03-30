@@ -17,6 +17,8 @@ extension Swiftly {
                 throw SwiftlyError.failedToConvertStringToURL(options.url)
             }
             
+            try Swiftly.useDirectory(Swiftly.binDirectory)
+            
             let packageRemover = PackageRemover(url: url, delegate: self)
             try packageRemover.resume()
         }

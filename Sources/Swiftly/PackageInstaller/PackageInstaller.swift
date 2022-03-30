@@ -16,9 +16,7 @@ final class PackageInstaller {
         self.delegate = delegate
     }
     
-    func resume() throws {
-        try Swiftly.useDirectory(Swiftly.binDirectory)
-        
+    func resume() throws {        
         delegate?.willCloneRepository()
         
         let packageName = url.lastPathComponent
