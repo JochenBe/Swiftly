@@ -9,6 +9,9 @@ import ArgumentParser
 
 extension Swiftly {
     struct List: ParsableCommand {
+        @Flag(name: [.long, .short], help: "List executables.")
+        var executables = false
+        
         func run() throws {
             try Swiftly.useDirectory(Swiftly.directory)
             
@@ -16,6 +19,12 @@ extension Swiftly {
             
             packages.forEach { package in
                 print(package.url.path.trimmingCharacters(in: .init(charactersIn: "/")))
+                
+                if executables {
+                    package.executables.forEach { executable in
+                        print("  - " + executable)
+                    }
+                }
             }
         }
     }
