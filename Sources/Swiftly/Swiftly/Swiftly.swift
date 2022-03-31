@@ -14,6 +14,7 @@ struct Swiftly: ParsableCommand {
         Install.self,
         Update.self,
         Remove.self,
+        List.self
     ])
     
     static let directory = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".swiftly")

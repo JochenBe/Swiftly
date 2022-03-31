@@ -10,7 +10,7 @@ import Foundation
 struct Packages {
     private static let url = Swiftly.directory.appendingPathComponent("packages.json")
     
-    private static func get() throws -> [Package] {
+    static func get() throws -> [Package] {
         guard FileManager.default.fileExists(atPath: url.path) else {
             return []
         }
