@@ -21,4 +21,6 @@ enum SwiftlyError: Error {
     case packageAlreadyInstalled(String)
     case packageNotFound(Any)
     case conflictingPackages(Package, [Package])
+    case multiplePackageRulesSpecified([PackageRule])
+    case invalidRangeSpecified(String)
 }

@@ -9,15 +9,26 @@ import Foundation
 
 final class PackageInstaller {
     let url: URL
+    let rule: PackageRule?
     var delegate: PackageInstallerDelegate?
     
-    init(url: URL, delegate: PackageInstallerDelegate? = nil) {
+    init(
+        url: URL,
+        rule: PackageRule? = nil,
+        delegate: PackageInstallerDelegate? = nil
+    ) {
         self.url = url
+        self.rule = rule
         self.delegate = delegate
     }
     
-    init(package: Package, delegate: PackageInstallerDelegate? = nil) {
+    init(
+        package: Package,
+        rule: PackageRule? = nil,
+        delegate: PackageInstallerDelegate? = nil
+    ) {
         self.url = package.url
+        self.rule = rule
         self.delegate = delegate
     }
     
@@ -55,7 +66,7 @@ final class PackageInstaller {
             !isDirectory.boolValue
         }
         
-        let package = Package(url: url, executables: executables)
+        let package = Package(url: url, rule: rule, executables: executables)
         let conflictingPackages = try Packages.getConflictingPackages(for: package)
         
         guard conflictingPackages.count == 0 else {

@@ -13,6 +13,8 @@ extension Swiftly {
         @Argument(help: "The URL of the package to install.")
         var url: String
         
+        @OptionGroup var packageRuleOptions: PackageRuleOptions
+        
         func run() throws {
             try Swiftly.useDirectory(Swiftly.binDirectory)
             
@@ -33,7 +35,14 @@ extension Swiftly {
                 url = github.appendingPathComponent(url.path)
             }
             
-            let packageInstaller = PackageInstaller(url: url, delegate: self)
+            let packageRule = try packageRuleOptions.packageRule
+            
+            let packageInstaller = PackageInstaller(
+                url: url,
+                rule: packageRule,
+                delegate: self
+            )
+            
             try packageInstaller.resume()
         }
         

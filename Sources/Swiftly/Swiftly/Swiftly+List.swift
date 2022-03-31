@@ -9,7 +9,7 @@ import ArgumentParser
 
 extension Swiftly {
     struct List: ParsableCommand {
-        @Flag(name: [.long, .short], help: "List executables.")
+        @Flag(name: .shortAndLong, help: "List executables.")
         var executables = false
         
         func run() throws {

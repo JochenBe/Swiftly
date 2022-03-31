@@ -9,5 +9,6 @@ import Foundation
 
 struct Package: Codable {
     let url: URL
+    let rule: PackageRule?
     let executables: [String]
 }

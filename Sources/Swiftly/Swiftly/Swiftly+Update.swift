@@ -13,6 +13,8 @@ extension Swiftly {
         @Argument(help: "The package to update.")
         var package: String
         
+        @OptionGroup var packageRuleOptions: PackageRuleOptions
+        
         func run() throws {
             try Swiftly.useDirectory(Swiftly.binDirectory)
             
@@ -20,7 +22,14 @@ extension Swiftly {
                 throw SwiftlyError.packageNotFound(package)
             }
             
-            let packageInstaller = PackageInstaller(package: package, delegate: self)
+            let packageRule = try packageRuleOptions.packageRule
+            
+            let packageInstaller = PackageInstaller(
+                package: package,
+                rule: packageRule,
+                delegate: self
+            )
+            
             try packageInstaller.resume()
         }
         
