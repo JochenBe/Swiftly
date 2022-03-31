@@ -16,6 +16,6 @@ struct Git {
     }
     
     static func clone(from url: URL, to path: String) -> Int32 {
-        execute("clone", url.absoluteString, path)
+        execute("clone", "--single-branch", "--depth", "1", url.absoluteString, path)
     }
 }
